@@ -24,39 +24,39 @@
                  </li>
                  <?php if (can('users.view')):
                     ?>
-                 <li class="nxl-item nxl-hasmenu">
-                     <a href="javascript:void(0);" class="nxl-link">
-                         <span class="nxl-micon"><i class="feather-cast"></i></span>
-                         <span class="nxl-mtext">Users</span><span class="nxl-arrow"><i
-                                 class="feather-chevron-right"></i></span>
-                     </a>
-                     <ul class="nxl-submenu">
-                         <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/users') ?>">All Users</a>
-                         </li>
-                         <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/users/create') ?>">Add
-                                 User</a></li>
-                     </ul>
-                 </li>
+                     <li class="nxl-item nxl-hasmenu">
+                         <a href="javascript:void(0);" class="nxl-link">
+                             <span class="nxl-micon"><i class="feather-cast"></i></span>
+                             <span class="nxl-mtext">Users</span><span class="nxl-arrow"><i
+                                     class="feather-chevron-right"></i></span>
+                         </a>
+                         <ul class="nxl-submenu">
+                             <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/users') ?>">All Users</a>
+                             </li>
+                             <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/users/create') ?>">Add
+                                     User</a></li>
+                         </ul>
+                     </li>
                  <?php endif; ?>
 
                  <?php if (can('roles.view') && can('permissions.view')): ?>
 
-                 <li class="nxl-item nxl-hasmenu">
-                     <a href="javascript:void(0);" class="nxl-link">
-                         <span class="nxl-micon"><i class="feather-send"></i></span>
-                         <span class="nxl-mtext">Roles and Permissions</span><span class="nxl-arrow"><i
-                                 class="feather-chevron-right"></i></span>
-                     </a>
-                     <ul class="nxl-submenu">
-                         <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/roles') ?>"><i
-                                     class="feather-plus "></i>&nbsp;Add Roles
-                             </a>
-                         </li>
-                         <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/permissions') ?>">
-                                 <i class="feather-plus"></i> &nbsp; Add Permissions</a></li>
+                     <li class="nxl-item nxl-hasmenu">
+                         <a href="javascript:void(0);" class="nxl-link">
+                             <span class="nxl-micon"><i class="feather-send"></i></span>
+                             <span class="nxl-mtext">Roles and Permissions</span><span class="nxl-arrow"><i
+                                     class="feather-chevron-right"></i></span>
+                         </a>
+                         <ul class="nxl-submenu">
+                             <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/roles') ?>"><i
+                                         class="feather-plus "></i>&nbsp;Add Roles
+                                 </a>
+                             </li>
+                             <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/permissions') ?>">
+                                     <i class="feather-plus"></i> &nbsp; Add Permissions</a></li>
 
-                     </ul>
-                 </li>
+                         </ul>
+                     </li>
                  <?php endif; ?>
 
                  <li class="nxl-item nxl-hasmenu">
@@ -135,6 +135,36 @@
 
                  </ul>
              </li>
+
+             <!-- Safety Page -->
+             <li class="nxl-item nxl-hasmenu">
+                 <a href="javascript:void(0);" class="nxl-link">
+                     <span class="nxl-micon"><i class="feather-users"></i></span>
+                     <span class="nxl-mtext">Safety Page</span><span class="nxl-arrow"><i
+                             class="feather-chevron-right"></i></span>
+                 </a>
+                 <ul class="nxl-submenu">
+                     <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/safetypage') ?>">
+                             Dashboard</a></li>
+                     <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/safetypage/page-header') ?>">
+                             Page Header Section</a></li>
+                     <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/safetypage/safety-header') ?>">
+                             Safety Header Section</a>
+                     </li>
+                     <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/safetypage/safety-tips') ?>">
+                             Safety Tips Section</a></li>
+                     <li class="nxl-item"><a class="nxl-link"
+                             href="<?= base_url('admin/safetypage/emergency-header') ?>">
+                             Emergency Header Section</a></li>
+                     <li class="nxl-item"><a class="nxl-link"
+                             href="<?= base_url('admin/safetypage/emergency-contact') ?>">
+                             Emergency Contacts Section</a></li>
+
+
+                 </ul>
+             </li>
+
+
              <li class="nxl-item nxl-hasmenu">
                  <a href="javascript:void(0);" class="nxl-link">
                      <span class="nxl-micon"><i class="feather-alert-circle"></i></span>

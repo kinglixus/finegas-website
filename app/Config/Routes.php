@@ -690,6 +690,37 @@ $routes->group('admin', ['filter' => 'admin_auth'], function ($routes) {
         'contact-messages/delete/(:num)',
         'Admin\ContactMessages::delete/$1'
     );
+
+    // ============================================================
+    // SAFETY TIPS ROUTES
+    // ============================================================
+    // Safety Tips Page CMS Routes
+    $routes->group('safetypage', function ($routes) {
+
+        $routes->get('/', 'Admin\Safetypage::index');
+
+        $routes->get('page-header', 'Admin\Safetypage::pageHeader');
+        $routes->post('page-header-update', 'Admin\Safetypage::updatePageHeader');
+
+        $routes->get('safety-header', 'Admin\Safetypage::safetyHeader');
+        $routes->post('safety-header-update', 'Admin\Safetypage::updateSafetyHeader');
+
+        $routes->get('safety-tips', 'Admin\Safetypage::safetyTips');
+
+        $routes->get('create-safety-tip', 'Admin\Safetypage::createSafetyTip');
+        $routes->post('store-safety-tip', 'Admin\Safetypage::storeSafetyTip');
+
+        $routes->get('edit-safety-tip/(:num)', 'Admin\Safetypage::editSafetyTip/$1');
+        $routes->post('update-safety-tip/(:num)', 'Admin\Safetypage::updateSafetyTip/$1');
+
+        $routes->post('delete-safety-tip/(:num)', 'Admin\Safetypage::deleteSafetyTip/$1');
+
+        $routes->get('emergency-header', 'Admin\Safetypage::emergencyHeader');
+        $routes->post('emergency-header-update', 'Admin\Safetypage::updateEmergencyHeader');
+
+        $routes->get('emergency-contact', 'Admin\Safetypage::emergencyContact');
+        $routes->post('emergency-contact-update', 'Admin\Safetypage::updateEmergencyContact');
+    });
 });
 
 
