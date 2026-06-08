@@ -15,10 +15,14 @@ class About extends BaseController
 
     public function index()
     {
+        $aboutData = $this->aboutModel->getAboutPageData();
+
         $data = [
-            'title' => 'About Us - FINE GAS',
+            'title' => $aboutData['page_header']['title'] ?? 'About Us',
         ];
-        $data = array_merge($data, $this->aboutModel->getAboutPageData());
+
+        $data = array_merge($data, $aboutData);
+
         return view('pages/about', $data);
     }
 }

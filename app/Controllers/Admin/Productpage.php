@@ -99,13 +99,14 @@ class Productpage extends BaseController
             $this->request
             ->getFile('image');
 
-        if ($image && $image->isValid() && !$image->hasMoved()) {
-
-            $newName =
-                $image->getRandomName();
+        if (
+            $image &&
+            $image->isValid() &&
+            !$image->hasMoved()
+        ) {
 
             $uploadPath =
-                FCPATH . 'uploads/products';
+                FCPATH . 'uploads/page_headers';
 
             if (!is_dir($uploadPath)) {
 
@@ -116,13 +117,29 @@ class Productpage extends BaseController
                 );
             }
 
+            if (
+                !empty($pageHeader['image']) &&
+                file_exists(
+                    FCPATH .
+                        $pageHeader['image']
+                )
+            ) {
+                unlink(
+                    FCPATH .
+                        $pageHeader['image']
+                );
+            }
+
+            $newName =
+                $image->getRandomName();
+
             $image->move(
                 $uploadPath,
                 $newName
             );
 
             $data['image'] =
-                'uploads/products/' . $newName;
+                'uploads/page_headers/' . $newName;
         }
 
         $this->productModel

@@ -26,8 +26,12 @@ class AboutModel extends Model
         'status',
     ];
 
-    private function decodeExtraData(array $row): array
+    private function decodeExtraData(?array $row): ?array
     {
+        if (empty($row)) {
+            return null;
+        }
+
         if (!empty($row['extra_data'])) {
             $decoded = json_decode($row['extra_data'], true);
             $row['extra_data'] = is_array($decoded) ? $decoded : [];
@@ -46,16 +50,37 @@ class AboutModel extends Model
             ->orderBy('sort_order', 'ASC')
             ->first();
 
-        return $section ? $this->decodeExtraData($section) : null;
+        return $this->decodeExtraData($section);
+    }
+
+    public function getSections(): array
+    {
+        $sections = $this->where('status', 1)
+            ->orderBy('sort_order', 'ASC')
+            ->findAll();
+
+        $data = [];
+
+        foreach ($sections as $section) {
+            $section = $this->decodeExtraData($section);
+
+            if (!empty($section['section_name'])) {
+                $data[$section['section_name']] = $section;
+            }
+        }
+
+        return $data;
     }
 
     public function getAboutPageData(): array
     {
+        $sections = $this->getSections();
+
         return [
-            'page_header'    => $this->getSection('page_header'),
-            'company_intro'  => $this->getSection('company_intro'),
-            'vision'         => $this->getSection('vision'),
-            'about_fine_gas' => $this->getSection('about_fine_gas'),
+            'page_header'    => $sections['page_header'] ?? null,
+            'company_intro'  => $sections['company_intro'] ?? null,
+            'vision'         => $sections['vision'] ?? null,
+            'about_fine_gas' => $sections['about_fine_gas'] ?? null,
         ];
     }
 }

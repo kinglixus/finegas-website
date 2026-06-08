@@ -67,9 +67,7 @@ class Testimonialpage extends BaseController
     {
         $pageHeader =
             $this->testimonialModel
-            ->getSection(
-                'page_header'
-            );
+            ->getSection('page_header');
 
         if (!$pageHeader) {
             return redirect()
@@ -80,27 +78,74 @@ class Testimonialpage extends BaseController
                 );
         }
 
+        $data = [
+            'title' =>
+            $this->request
+                ->getPost('title'),
+
+            'subtitle' =>
+            $this->request
+                ->getPost('subtitle'),
+
+            'description' =>
+            $this->request
+                ->getPost('description'),
+
+            'status' =>
+            $this->request
+                ->getPost('status'),
+        ];
+
+        $image =
+            $this->request
+            ->getFile('image');
+
+        if (
+            $image &&
+            $image->isValid() &&
+            !$image->hasMoved()
+        ) {
+            $uploadPath =
+                FCPATH . 'uploads/page_headers';
+
+            if (!is_dir($uploadPath)) {
+                mkdir(
+                    $uploadPath,
+                    0777,
+                    true
+                );
+            }
+
+            if (
+                !empty($pageHeader['image']) &&
+                file_exists(
+                    FCPATH .
+                        $pageHeader['image']
+                )
+            ) {
+                unlink(
+                    FCPATH .
+                        $pageHeader['image']
+                );
+            }
+
+            $newName =
+                $image->getRandomName();
+
+            $image->move(
+                $uploadPath,
+                $newName
+            );
+
+            $data['image'] =
+                'uploads/page_headers/' .
+                $newName;
+        }
+
         $this->testimonialModel
             ->update(
                 $pageHeader['id'],
-                [
-
-                    'title' =>
-                    $this->request
-                        ->getPost('title'),
-
-                    'subtitle' =>
-                    $this->request
-                        ->getPost('subtitle'),
-
-                    'description' =>
-                    $this->request
-                        ->getPost('description'),
-
-                    'status' =>
-                    $this->request
-                        ->getPost('status')
-                ]
+                $data
             );
 
         activity_log(
@@ -117,7 +162,6 @@ class Testimonialpage extends BaseController
                 'Page Header updated successfully.'
             );
     }
-
     public function testimonialHeader()
     {
         $testimonialHeader =
@@ -317,7 +361,7 @@ class Testimonialpage extends BaseController
             return redirect()
                 ->to(
                     base_url(
-                        'admin/testimonialpage/testimonials'
+                        'admin/testimonialpage/testimonial'
                     )
                 )
                 ->with(
@@ -337,74 +381,51 @@ class Testimonialpage extends BaseController
 
     public function updateTestimonial($id)
     {
-        $testimonial =
-            $this->testimonialModel
-            ->find($id);
+        $testimonial = $this->testimonialModel->find($id);
 
         if (!$testimonial) {
             return redirect()
-                ->to(
-                    base_url(
-                        'admin/testimonialpage/testimonial'
-                    )
-                )
-                ->with(
-                    'error',
-                    'Testimonial not found.'
-                );
+                ->to(base_url('admin/testimonialpage/testimonials'))
+                ->with('error', 'Testimonial not found.');
         }
 
         $data = [
-
-            'title' =>
-            $this->request
-                ->getPost('title'),
-
-            'subtitle' =>
-            $this->request
-                ->getPost('subtitle'),
-
-            'description' =>
-            $this->request
-                ->getPost('description'),
-
-            'icon' =>
-            $this->request
-                ->getPost('icon'),
-
-            'sort_order' =>
-            $this->request
-                ->getPost('sort_order'),
-
-            'status' =>
-            $this->request
-                ->getPost('status')
+            'title'       => $this->request->getPost('title'),
+            'subtitle'    => $this->request->getPost('subtitle'),
+            'description' => $this->request->getPost('description'),
+            'icon'        => $this->request->getPost('icon'),
+            'sort_order'  => $this->request->getPost('sort_order'),
+            'status'      => $this->request->getPost('status'),
         ];
 
-        $image =
-            $this->request
-            ->getFile('image');
+        $image = $this->request->getFile('image');
 
-        if ($image && $image->isValid()) {
-            $newName =
-                $image->getRandomName();
+        if (
+            $image &&
+            $image->isValid() &&
+            !$image->hasMoved()
+        ) {
+            $uploadPath = FCPATH . 'uploads/testimonials';
 
-            $image->move(
-                FCPATH .
-                    'uploads/testimonials',
-                $newName
-            );
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
 
-            $data['image'] =
-                'uploads/testimonials/' .
-                $newName;
+            if (
+                !empty($testimonial['image']) &&
+                file_exists(FCPATH . $testimonial['image'])
+            ) {
+                unlink(FCPATH . $testimonial['image']);
+            }
+
+            $newName = $image->getRandomName();
+
+            $image->move($uploadPath, $newName);
+
+            $data['image'] = 'uploads/testimonials/' . $newName;
         }
 
-        $this->testimonialModel
-            ->update(
-                $id,
-                $data
-            );
+        $this->testimonialModel->update($id, $data);
 
         activity_log(
             'TESTIMONIAL_UPDATED',
@@ -414,32 +435,29 @@ class Testimonialpage extends BaseController
         );
 
         return redirect()
-            ->to(
-                base_url(
-                    'admin/testimonialpage/testimonial'
-                )
-            )
-            ->with(
-                'success',
-                'Testimonial updated successfully.'
-            );
+            ->to(base_url('admin/testimonialpage/testimonials'))
+            ->with('success', 'Testimonial updated successfully.');
     }
-
     public function deleteTestimonial($id)
     {
-        $testimonial =
-            $this->testimonialModel
-            ->find($id);
+        $testimonial = $this->testimonialModel->find($id);
 
         if (!$testimonial) {
             return $this->response
                 ->setJSON([
-                    'status' => false
+                    'status'  => false,
+                    'message' => 'Testimonial not found.',
                 ]);
         }
 
-        $this->testimonialModel
-            ->delete($id);
+        if (
+            !empty($testimonial['image']) &&
+            file_exists(FCPATH . $testimonial['image'])
+        ) {
+            unlink(FCPATH . $testimonial['image']);
+        }
+
+        $this->testimonialModel->delete($id);
 
         activity_log(
             'TESTIMONIAL_DELETED',
@@ -450,7 +468,8 @@ class Testimonialpage extends BaseController
 
         return $this->response
             ->setJSON([
-                'status' => true
+                'status'  => true,
+                'message' => 'Testimonial deleted successfully.',
             ]);
     }
 }

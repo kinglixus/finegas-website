@@ -54,27 +54,52 @@
 
     <div class="col-xl-12">
 
+        <?php if (session()->getFlashdata('success')): ?>
+
+            <div class="alert alert-success">
+
+                <?= esc(session()->getFlashdata('success')) ?>
+
+            </div>
+
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('error')): ?>
+
+            <div class="alert alert-danger">
+
+                <?= esc(session()->getFlashdata('error')) ?>
+
+            </div>
+
+        <?php endif; ?>
+
         <div class="card">
 
             <div class="card-header">
 
-                <h5 class="card-title mb-1">
+                <div>
 
-                    Services Page Header
+                    <h5 class="card-title mb-1">
 
-                </h5>
+                        Services Page Header
 
-                <p class="text-muted mb-0">
+                    </h5>
 
-                    Manage the Services page banner and breadcrumb title.
+                    <p class="text-muted mb-0">
 
-                </p>
+                        Manage the Services page banner image, title, and breadcrumb title.
+
+                    </p>
+
+                </div>
 
             </div>
 
             <div class="card-body">
 
-                <form action="<?= base_url('admin/servicepage/page-header-update') ?>" method="post">
+                <form action="<?= base_url('admin/servicepage/page-header-update') ?>" method="post"
+                    enctype="multipart/form-data">
 
                     <?= csrf_field() ?>
 
@@ -116,6 +141,51 @@
 
                             <textarea name="description" rows="5"
                                 class="form-control"><?= esc($pageHeader['description'] ?? '') ?></textarea>
+
+                        </div>
+
+                        <!-- HEADER IMAGE -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Header Image
+
+                            </label>
+
+                            <input type="file" name="image" id="image" class="form-control" accept="image/*">
+
+                            <small class="text-muted">
+
+                                Leave blank to keep the current header image.
+
+                            </small>
+
+                        </div>
+
+                        <!-- CURRENT IMAGE PREVIEW -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Current Header Image
+
+                            </label>
+
+                            <div>
+
+                                <img id="imagePreview" src="<?= !empty($pageHeader['image'])
+                                                                ? base_url($pageHeader['image'])
+                                                                : base_url('assets/admin/images/no-image.png') ?>"
+                                    class="img-thumbnail" style="
+                                        width: 320px;
+                                        height: 180px;
+                                        object-fit: cover;
+                                    " alt="Services Page Header Image">
+
+                            </div>
 
                         </div>
 
@@ -172,5 +242,32 @@
     </div>
 
 </div>
+
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+
+<script>
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('imagePreview');
+
+    if (imageInput && imagePreview) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+</script>
 
 <?= $this->endSection() ?>

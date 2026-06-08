@@ -533,61 +533,83 @@ $routes->group('admin', ['filter' => 'admin_auth'], function ($routes) {
 
     $routes->post('contactpage/delete-contact-info/(:num)', 'Admin\Contactpage::deleteContactInfo/$1');
 
-    $routes->get(
-        'testimonialpage',
-        'Admin\Testimonialpage::index'
-    );
+    // $routes->get(
+    //     'testimonialpage',
+    //     'Admin\Testimonialpage::index'
+    // );
 
-    $routes->get(
-        'testimonialpage/page-header',
-        'Admin\Testimonialpage::pageHeader'
-    );
+    // $routes->get(
+    //     'testimonialpage/page-header',
+    //     'Admin\Testimonialpage::pageHeader'
+    // );
 
-    $routes->post(
-        'testimonialpage/page-header-update',
-        'Admin\Testimonialpage::updatePageHeader'
-    );
+    // $routes->post(
+    //     'testimonialpage/page-header-update',
+    //     'Admin\Testimonialpage::updatePageHeader'
+    // );
 
-    $routes->get(
-        'testimonialpage/testimonial-header',
-        'Admin\Testimonialpage::testimonialHeader'
-    );
+    // $routes->get(
+    //     'testimonialpage/testimonial-header',
+    //     'Admin\Testimonialpage::testimonialHeader'
+    // );
 
-    $routes->post(
-        'testimonialpage/testimonial-header-update',
-        'Admin\Testimonialpage::updateTestimonialHeader'
-    );
+    // $routes->post(
+    //     'testimonialpage/testimonial-header-update',
+    //     'Admin\Testimonialpage::updateTestimonialHeader'
+    // );
 
 
-    $routes->get(
-        'testimonialpage/testimonial',
-        'Admin\Testimonialpage::testimonials'
-    );
+    // $routes->get(
+    //     'testimonialpage/testimonial',
+    //     'Admin\Testimonialpage::testimonials'
+    // );
 
-    $routes->get(
-        'testimonialpage/create-testimonial',
-        'Admin\Testimonialpage::createTestimonial'
-    );
+    // $routes->get(
+    //     'testimonialpage/create-testimonial',
+    //     'Admin\Testimonialpage::createTestimonial'
+    // );
 
-    $routes->post(
-        'testimonialpage/store-testimonial',
-        'Admin\Testimonialpage::storeTestimonial'
-    );
+    // $routes->post(
+    //     'testimonialpage/store-testimonial',
+    //     'Admin\Testimonialpage::storeTestimonial'
+    // );
 
-    $routes->get(
-        'testimonialpage/edit-testimonial/(:num)',
-        'Admin\Testimonialpage::editTestimonial/$1'
-    );
+    // $routes->get(
+    //     'testimonialpage/edit-testimonial/(:num)',
+    //     'Admin\Testimonialpage::editTestimonial/$1'
+    // );
 
-    $routes->post(
-        'testimonialpage/update-testimonial/(:num)',
-        'Admin\Testimonialpage::updateTestimonial/$1'
-    );
+    // $routes->post(
+    //     'testimonialpage/update-testimonial/(:num)',
+    //     'Admin\Testimonialpage::updateTestimonial/$1'
+    // );
 
-    $routes->post(
-        'testimonialpage/delete-testimonial/(:num)',
-        'Admin\Testimonialpage::deleteTestimonial/$1'
-    );
+    // $routes->post(
+    //     'testimonialpage/delete-testimonial/(:num)',
+    //     'Admin\Testimonialpage::deleteTestimonial/$1'
+    // );
+
+    // Testimonial Page Routes
+    $routes->group('testimonialpage', function ($routes) {
+
+        $routes->get('/', 'Admin\Testimonialpage::index');
+
+        $routes->get('page-header', 'Admin\Testimonialpage::pageHeader');
+        $routes->post('page-header-update', 'Admin\Testimonialpage::updatePageHeader');
+
+        $routes->get('testimonial-header', 'Admin\Testimonialpage::testimonialHeader');
+        $routes->post('testimonial-header-update', 'Admin\Testimonialpage::updateTestimonialHeader');
+
+        $routes->get('testimonials', 'Admin\Testimonialpage::testimonials');
+
+        $routes->get('create-testimonial', 'Admin\Testimonialpage::createTestimonial');
+        $routes->post('store-testimonial', 'Admin\Testimonialpage::storeTestimonial');
+
+        $routes->get('edit-testimonial/(:num)', 'Admin\Testimonialpage::editTestimonial/$1');
+        $routes->post('update-testimonial/(:num)', 'Admin\Testimonialpage::updateTestimonial/$1');
+
+        $routes->post('delete-testimonial/(:num)', 'Admin\Testimonialpage::deleteTestimonial/$1');
+    });
 
     // Team Page Routes
     $routes->get(

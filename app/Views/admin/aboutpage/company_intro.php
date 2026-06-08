@@ -2,6 +2,10 @@
 
 <?= $this->section('content') ?>
 
+<?php
+$highlightText = $companyIntro['extra_data']['highlight_text'] ?? 'FINE GAS';
+?>
+
 <div class="page-header">
 
     <div class="page-header-left">
@@ -53,6 +57,18 @@
 <div class="row">
 
     <div class="col-xl-12">
+
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="alert alert-success">
+                <?= esc(session()->getFlashdata('success')) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger">
+                <?= esc(session()->getFlashdata('error')) ?>
+            </div>
+        <?php endif; ?>
 
         <div class="card">
 
@@ -127,6 +143,27 @@
 
                             <textarea name="description" rows="8"
                                 class="form-control"><?= esc($companyIntro['description'] ?? '') ?></textarea>
+
+                        </div>
+
+                        <!-- HIGHLIGHT TEXT -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Highlight Text
+
+                            </label>
+
+                            <input type="text" name="highlight_text" class="form-control"
+                                value="<?= esc($highlightText) ?>" placeholder="FINE GAS">
+
+                            <small class="text-muted">
+
+                                This text appears highlighted before the company intro description.
+
+                            </small>
 
                         </div>
 
@@ -240,28 +277,26 @@
 <?= $this->section('scripts') ?>
 
 <script>
-    document
-        .getElementById('image')
-        .addEventListener(
-            'change',
-            function(e) {
-                const file = e.target.files[0];
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('imagePreview');
 
-                if (!file) {
-                    return;
-                }
+    if (imageInput && imagePreview) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
 
-                const reader = new FileReader();
-
-                reader.onload = function(event) {
-                    document
-                        .getElementById('imagePreview')
-                        .src = event.target.result;
-                };
-
-                reader.readAsDataURL(file);
+            if (!file) {
+                return;
             }
-        );
+
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
 </script>
 
 <?= $this->endSection() ?>

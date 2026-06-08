@@ -92,6 +92,15 @@
 
     <!-- Template Stylesheet -->
     <link href="<?= base_url('public/assets/css/style.css') ?>" rel="stylesheet">
+
+    <?php if (!empty($page_header['image'])): ?>
+        <style>
+            .page-header {
+                background: linear-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .1)), url("<?= base_url($page_header['image']) ?>") center center no-repeat;
+                background-size: cover;
+            }
+        </style>
+    <?php endif; ?>
 </head>
 
 <body>

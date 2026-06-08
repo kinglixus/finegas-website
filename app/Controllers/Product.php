@@ -15,10 +15,13 @@ class Product extends BaseController
 
     public function index()
     {
+        $productData = $this->productModel->getProductPageData();
+
         $data = [
-            'title' => 'Our Products - Fine Gas',
+            'title' => ($productData['page_header']['title'] ?? 'Our Products') . ' - Fine Gas',
         ];
-        $data = array_merge($data, $this->productModel->getProductPageData());
+
+        $data = array_merge($data, $productData);
 
         return view('pages/product', $data);
     }

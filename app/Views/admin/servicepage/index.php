@@ -22,6 +22,26 @@
 
 </div>
 
+<?php if (session()->getFlashdata('success')): ?>
+
+    <div class="alert alert-success">
+
+        <?= esc(session()->getFlashdata('success')) ?>
+
+    </div>
+
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+
+    <div class="alert alert-danger">
+
+        <?= esc(session()->getFlashdata('error')) ?>
+
+    </div>
+
+<?php endif; ?>
+
 <div class="row">
 
     <!-- PAGE HEADER -->
@@ -172,6 +192,8 @@
 
                         <th>Section</th>
 
+                        <th>Image</th>
+
                         <th>Title</th>
 
                         <th>Status</th>
@@ -193,6 +215,29 @@
                         <td>
 
                             Page Header
+
+                        </td>
+
+                        <td>
+
+                            <?php if (!empty($page_header['image'])): ?>
+
+                                <img src="<?= base_url($page_header['image']) ?>"
+                                    alt="<?= esc($page_header['title'] ?? 'Page Header') ?>" class="img-thumbnail" style="
+                                        width: 120px;
+                                        height: 65px;
+                                        object-fit: cover;
+                                    ">
+
+                            <?php else: ?>
+
+                                <span class="text-muted">
+
+                                    No image
+
+                                </span>
+
+                            <?php endif; ?>
 
                         </td>
 
@@ -241,6 +286,16 @@
                         <td>
 
                             Service Header
+
+                        </td>
+
+                        <td>
+
+                            <span class="text-muted">
+
+                                N/A
+
+                            </span>
 
                         </td>
 
@@ -295,7 +350,17 @@
 
                         <td>
 
-                            <?= count($services) ?>
+                            <span class="text-muted">
+
+                                Collection
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <?= count($services ?? []) ?>
 
                             Service(s)
 

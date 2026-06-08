@@ -12,12 +12,16 @@ class Service extends BaseController
     {
         $this->serviceModel = new ServiceModel();
     }
+
     public function index()
     {
+        $serviceData = $this->serviceModel->getServicePageData();
+
         $data = [
-            'title' => 'Our Services - Fine Gas',
+            'title' => ($serviceData['page_header']['title'] ?? 'Our Services') . ' - Fine Gas',
         ];
-        $data = array_merge($data, $this->serviceModel->getServicePageData());
+
+        $data = array_merge($data, $serviceData);
 
         return view('pages/service', $data);
     }

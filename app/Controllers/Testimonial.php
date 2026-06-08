@@ -15,10 +15,14 @@ class Testimonial extends BaseController
 
     public function index()
     {
+        $testimonialData = $this->testimonialModel->getTestimonialPageData();
+
         $data = [
-            'title' => 'Testimonials - Fine Gas',
+            'title' => ($testimonialData['page_header']['title'] ?? 'Testimonials') . ' - Fine Gas',
         ];
-        $data = array_merge($data, $this->testimonialModel->getTestimonialPageData());
+
+        $data = array_merge($data, $testimonialData);
+
         return view('pages/testimonial', $data);
     }
 }

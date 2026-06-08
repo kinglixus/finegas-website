@@ -11,103 +11,83 @@ class Servicepage extends BaseController
 
     public function __construct()
     {
-        $this->serviceModel =
-            new ServiceModel();
+        $this->serviceModel = new ServiceModel();
     }
 
     public function index()
     {
         $data = [
-
             'title' => 'Services Page CMS',
 
-            'page_header' =>
-            $this->serviceModel
-                ->getSection(
-                    'page_header'
-                ),
+            'page_header' => $this->serviceModel
+                ->getSection('page_header'),
 
-            'service_header' =>
-            $this->serviceModel
-                ->getSection(
-                    'service_header'
-                ),
+            'service_header' => $this->serviceModel
+                ->getSection('service_header'),
 
-            'services' =>
-            $this->serviceModel
-                ->getSectionItems(
-                    'services'
-                )
+            'services' => $this->serviceModel
+                ->getSectionItems('services'),
         ];
 
-        return view(
-            'admin/servicepage/index',
-            $data
-        );
+        return view('admin/servicepage/index', $data);
     }
 
 
     public function pageHeader()
     {
         $pageHeader = $this->serviceModel
-            ->getSection(
-                'page_header'
-            );
+            ->getSection('page_header');
 
         return view(
             'admin/servicepage/page_header',
             [
                 'title'      => 'Page Header',
-                'pageHeader' => $pageHeader
+                'pageHeader' => $pageHeader,
             ]
         );
     }
 
+
     public function updatePageHeader()
     {
         $pageHeader = $this->serviceModel
-            ->getSection(
-                'page_header'
-            );
+            ->getSection('page_header');
 
         if (!$pageHeader) {
             return redirect()
                 ->back()
-                ->with(
-                    'error',
-                    'Page Header not found.'
-                );
+                ->with('error', 'Page Header not found.');
+        }
+
+        $data = [
+            'title'       => $this->request->getPost('title'),
+            'subtitle'    => $this->request->getPost('subtitle'),
+            'description' => $this->request->getPost('description'),
+            'status'      => $this->request->getPost('status'),
+        ];
+
+        $image = $this->request->getFile('image');
+
+        if (
+            $image &&
+            $image->isValid() &&
+            !$image->hasMoved()
+        ) {
+            $imagePath = $this->uploadImage(
+                $image,
+                'page_headers',
+                $pageHeader['image'] ?? null
+            );
+
+            if (!empty($imagePath)) {
+                $data['image'] = $imagePath;
+            }
         }
 
         $this->serviceModel
             ->update(
                 $pageHeader['id'],
-                [
-
-                    'title' =>
-                    $this->request
-                        ->getPost(
-                            'title'
-                        ),
-
-                    'subtitle' =>
-                    $this->request
-                        ->getPost(
-                            'subtitle'
-                        ),
-
-                    'description' =>
-                    $this->request
-                        ->getPost(
-                            'description'
-                        ),
-
-                    'status' =>
-                    $this->request
-                        ->getPost(
-                            'status'
-                        )
-                ]
+                $data
             );
 
         activity_log(
@@ -119,25 +99,20 @@ class Servicepage extends BaseController
 
         return redirect()
             ->back()
-            ->with(
-                'success',
-                'Page Header updated successfully.'
-            );
+            ->with('success', 'Page Header updated successfully.');
     }
 
 
     public function serviceHeader()
     {
         $serviceHeader = $this->serviceModel
-            ->getSection(
-                'service_header'
-            );
+            ->getSection('service_header');
 
         return view(
             'admin/servicepage/service_header',
             [
                 'title'         => 'Service Header',
-                'serviceHeader' => $serviceHeader
+                'serviceHeader' => $serviceHeader,
             ]
         );
     }
@@ -146,47 +121,22 @@ class Servicepage extends BaseController
     public function updateServiceHeader()
     {
         $serviceHeader = $this->serviceModel
-            ->getSection(
-                'service_header'
-            );
+            ->getSection('service_header');
 
         if (!$serviceHeader) {
             return redirect()
                 ->back()
-                ->with(
-                    'error',
-                    'Service Header not found.'
-                );
+                ->with('error', 'Service Header not found.');
         }
 
         $this->serviceModel
             ->update(
                 $serviceHeader['id'],
                 [
-
-                    'title' =>
-                    $this->request
-                        ->getPost(
-                            'title'
-                        ),
-
-                    'subtitle' =>
-                    $this->request
-                        ->getPost(
-                            'subtitle'
-                        ),
-
-                    'description' =>
-                    $this->request
-                        ->getPost(
-                            'description'
-                        ),
-
-                    'status' =>
-                    $this->request
-                        ->getPost(
-                            'status'
-                        )
+                    'title'       => $this->request->getPost('title'),
+                    'subtitle'    => $this->request->getPost('subtitle'),
+                    'description' => $this->request->getPost('description'),
+                    'status'      => $this->request->getPost('status'),
                 ]
             );
 
@@ -199,44 +149,23 @@ class Servicepage extends BaseController
 
         return redirect()
             ->back()
-            ->with(
-                'success',
-                'Service Header updated successfully.'
-            );
+            ->with('success', 'Service Header updated successfully.');
     }
+
 
     public function services()
     {
         $data = [
-
             'title' => 'Services',
 
-            'services' =>
-
-            $this->serviceModel
-
-                ->where(
-                    'section_name',
-                    'services'
-                )
-
-                ->where(
-                    'section_type',
-                    'item'
-                )
-
-                ->orderBy(
-                    'sort_order',
-                    'ASC'
-                )
-
-                ->findAll()
+            'services' => $this->serviceModel
+                ->where('section_name', 'services')
+                ->where('section_type', 'item')
+                ->orderBy('sort_order', 'ASC')
+                ->findAll(),
         ];
 
-        return view(
-            'admin/servicepage/services',
-            $data
-        );
+        return view('admin/servicepage/services', $data);
     }
 
 
@@ -245,7 +174,7 @@ class Servicepage extends BaseController
         return view(
             'admin/servicepage/service_create',
             [
-                'title' => 'Create Service'
+                'title' => 'Create Service',
             ]
         );
     }
@@ -253,8 +182,7 @@ class Servicepage extends BaseController
 
     public function storeService()
     {
-        $image =
-            $this->request
+        $image = $this->request
             ->getFile('image');
 
         $imagePath = null;
@@ -264,53 +192,24 @@ class Servicepage extends BaseController
             $image->isValid() &&
             !$image->hasMoved()
         ) {
-
-            $newName =
-                $image->getRandomName();
-
-            $image->move(
-                FCPATH .
-                    'uploads/services',
-                $newName
+            $imagePath = $this->uploadImage(
+                $image,
+                'services'
             );
-
-            $imagePath =
-                'uploads/services/' .
-                $newName;
         }
 
         $this->serviceModel
             ->insert([
-
-                'section_name' =>
-                'services',
-
-                'section_type' =>
-                'item',
-
-                'title' =>
-                $this->request->getPost('title'),
-
-                'description' =>
-                $this->request->getPost('description'),
-
-                'image' =>
-                $imagePath,
-
-                'icon' =>
-                $this->request->getPost('icon'),
-
-                'button_text' =>
-                $this->request->getPost('button_text'),
-
-                'button_url' =>
-                $this->request->getPost('button_url'),
-
-                'sort_order' =>
-                $this->request->getPost('sort_order'),
-
-                'status' =>
-                $this->request->getPost('status')
+                'section_name' => 'services',
+                'section_type' => 'item',
+                'title'        => $this->request->getPost('title'),
+                'description'  => $this->request->getPost('description'),
+                'image'        => $imagePath,
+                'icon'         => $this->request->getPost('icon'),
+                'button_text'  => $this->request->getPost('button_text'),
+                'button_url'   => $this->request->getPost('button_url'),
+                'sort_order'   => $this->request->getPost('sort_order'),
+                'status'       => $this->request->getPost('status'),
             ]);
 
         activity_log(
@@ -321,16 +220,10 @@ class Servicepage extends BaseController
         );
 
         return redirect()
-            ->to(
-                base_url(
-                    'admin/servicepage/services'
-                )
-            )
-            ->with(
-                'success',
-                'Service created successfully.'
-            );
+            ->to(base_url('admin/servicepage/services'))
+            ->with('success', 'Service created successfully.');
     }
+
 
     public function editService($id)
     {
@@ -339,25 +232,19 @@ class Servicepage extends BaseController
 
         if (!$service) {
             return redirect()
-                ->to(
-                    base_url(
-                        'admin/servicepage/services'
-                    )
-                )
-                ->with(
-                    'error',
-                    'Service not found.'
-                );
+                ->to(base_url('admin/servicepage/services'))
+                ->with('error', 'Service not found.');
         }
 
         return view(
             'admin/servicepage/service_edit',
             [
                 'title'   => 'Edit Service',
-                'service' => $service
+                'service' => $service,
             ]
         );
     }
+
 
     public function updateService($id)
     {
@@ -366,56 +253,21 @@ class Servicepage extends BaseController
 
         if (!$service) {
             return redirect()
-                ->to(
-                    base_url(
-                        'admin/servicepage/services'
-                    )
-                )
-                ->with(
-                    'error',
-                    'Service not found.'
-                );
+                ->to(base_url('admin/servicepage/services'))
+                ->with('error', 'Service not found.');
         }
 
         $data = [
-
-            'title' =>
-            $this->request
-                ->getPost('title'),
-
-            'description' =>
-            $this->request
-                ->getPost('description'),
-
-            'icon' =>
-            $this->request
-                ->getPost('icon'),
-
-            'button_text' =>
-            $this->request
-                ->getPost('button_text'),
-
-            'button_url' =>
-            $this->request
-                ->getPost('button_url'),
-
-            'sort_order' =>
-            $this->request
-                ->getPost('sort_order'),
-
-            'status' =>
-            $this->request
-                ->getPost('status')
+            'title'       => $this->request->getPost('title'),
+            'description' => $this->request->getPost('description'),
+            'icon'        => $this->request->getPost('icon'),
+            'button_text' => $this->request->getPost('button_text'),
+            'button_url'  => $this->request->getPost('button_url'),
+            'sort_order'  => $this->request->getPost('sort_order'),
+            'status'      => $this->request->getPost('status'),
         ];
 
-        /*
-    |--------------------------------------------------------------------------
-    | IMAGE REPLACEMENT
-    |--------------------------------------------------------------------------
-    */
-
-        $image =
-            $this->request
+        $image = $this->request
             ->getFile('image');
 
         if (
@@ -423,33 +275,15 @@ class Servicepage extends BaseController
             $image->isValid() &&
             !$image->hasMoved()
         ) {
-            if (
-                !empty($service['image'])
-                &&
-                file_exists(
-                    FCPATH .
-                        $service['image']
-                )
-            ) {
-                unlink(
-                    FCPATH .
-                        $service['image']
-                );
-            }
-
-            $newName =
-                $image
-                ->getRandomName();
-
-            $image->move(
-                FCPATH .
-                    'uploads/services',
-                $newName
+            $imagePath = $this->uploadImage(
+                $image,
+                'services',
+                $service['image'] ?? null
             );
 
-            $data['image'] =
-                'uploads/services/' .
-                $newName;
+            if (!empty($imagePath)) {
+                $data['image'] = $imagePath;
+            }
         }
 
         $this->serviceModel
@@ -466,16 +300,10 @@ class Servicepage extends BaseController
         );
 
         return redirect()
-            ->to(
-                base_url(
-                    'admin/servicepage/services'
-                )
-            )
-            ->with(
-                'success',
-                'Service updated successfully.'
-            );
+            ->to(base_url('admin/servicepage/services'))
+            ->with('success', 'Service updated successfully.');
     }
+
 
     public function deleteService($id)
     {
@@ -485,35 +313,16 @@ class Servicepage extends BaseController
         if (!$service) {
             return $this->response
                 ->setJSON([
-                    'status' => false
+                    'status' => false,
                 ]);
         }
 
-        /*
-    |--------------------------------------------------------------------------
-    | DELETE IMAGE
-    |--------------------------------------------------------------------------
-    */
-
         if (
-            !empty($service['image'])
-            &&
-            file_exists(
-                FCPATH .
-                    $service['image']
-            )
+            !empty($service['image']) &&
+            file_exists(FCPATH . $service['image'])
         ) {
-            unlink(
-                FCPATH .
-                    $service['image']
-            );
+            unlink(FCPATH . $service['image']);
         }
-
-        /*
-    |--------------------------------------------------------------------------
-    | DELETE RECORD
-    |--------------------------------------------------------------------------
-    */
 
         $this->serviceModel
             ->delete($id);
@@ -527,7 +336,44 @@ class Servicepage extends BaseController
 
         return $this->response
             ->setJSON([
-                'status' => true
+                'status' => true,
             ]);
+    }
+
+
+    private function uploadImage($image, string $folder, ?string $oldImage = null): ?string
+    {
+        $allowedTypes = [
+            'image/jpg',
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+        ];
+
+        if (!in_array($image->getMimeType(), $allowedTypes, true)) {
+            return null;
+        }
+
+        $uploadPath = FCPATH . 'uploads/' . $folder;
+
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0775, true);
+        }
+
+        if (
+            !empty($oldImage) &&
+            file_exists(FCPATH . $oldImage)
+        ) {
+            unlink(FCPATH . $oldImage);
+        }
+
+        $newName = $image->getRandomName();
+
+        $image->move(
+            $uploadPath,
+            $newName
+        );
+
+        return 'uploads/' . $folder . '/' . $newName;
     }
 }

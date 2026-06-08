@@ -50,125 +50,206 @@
 
 </div>
 
-<div class="card">
+<div class="row">
 
-    <div class="card-header">
+    <div class="col-xl-12">
 
-        <h5 class="card-title mb-0">
+        <?php if (session()->getFlashdata('success')): ?>
 
-            Team Page Header
+            <div class="alert alert-success">
 
-        </h5>
+                <?= esc(session()->getFlashdata('success')) ?>
 
-    </div>
+            </div>
 
-    <div class="card-body">
+        <?php endif; ?>
 
-        <form action="<?= base_url('admin/teampage/page-header-update') ?>" method="post" enctype="multipart/form-data">
+        <?php if (session()->getFlashdata('error')): ?>
 
-            <?= csrf_field() ?>
+            <div class="alert alert-danger">
 
-            <div class="row">
+                <?= esc(session()->getFlashdata('error')) ?>
 
-                <!-- TITLE -->
+            </div>
 
-                <div class="col-md-8 mb-3">
+        <?php endif; ?>
 
-                    <label class="form-label">
+        <div class="card">
 
-                        Title
+            <div class="card-header">
 
-                    </label>
+                <div>
 
-                    <input type="text" name="title" class="form-control" value="<?= esc($pageHeader['title'] ?? '') ?>"
-                        required>
+                    <h5 class="card-title mb-1">
 
-                </div>
+                        Team Page Header
 
-                <!-- STATUS -->
+                    </h5>
 
-                <div class="col-md-4 mb-3">
+                    <p class="text-muted mb-0">
 
-                    <label class="form-label">
+                        Manage the Team page banner image, title, and breadcrumb title.
 
-                        Status
-
-                    </label>
-
-                    <select name="status" class="form-select">
-
-                        <option value="1" <?= ($pageHeader['status'] ?? 1) == 1 ? 'selected' : '' ?>>
-
-                            Active
-
-                        </option>
-
-                        <option value="0" <?= ($pageHeader['status'] ?? 1) == 0 ? 'selected' : '' ?>>
-
-                            Inactive
-
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <!-- BANNER IMAGE -->
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-
-                        Banner Image
-
-                    </label>
-
-                    <input type="file" name="image" id="image" class="form-control" accept="image/*">
-
-                </div>
-
-                <!-- IMAGE PREVIEW -->
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-
-                        Current Banner
-
-                    </label>
-
-                    <div>
-
-                        <img id="imagePreview" src="<?= !empty($pageHeader['image'])
-                                                        ? base_url($pageHeader['image'])
-                                                        : base_url('assets/admin/images/no-image.png') ?>" class="img-thumbnail" style="
-                                max-height: 150px;
-                                width: auto;
-                            ">
-
-                    </div>
+                    </p>
 
                 </div>
 
             </div>
 
-            <hr>
+            <div class="card-body">
 
-            <button type="submit" class="btn btn-primary">
+                <form action="<?= base_url('admin/teampage/page-header-update') ?>" method="post"
+                    enctype="multipart/form-data">
 
-                <i class="feather-save me-2"></i>
+                    <?= csrf_field() ?>
 
-                Save Changes
+                    <div class="row">
 
-            </button>
+                        <!-- TITLE -->
 
-            <a href="<?= base_url('admin/teampage') ?>" class="btn btn-light">
+                        <div class="col-md-6 mb-3">
 
-                Cancel
+                            <label class="form-label">
 
-            </a>
+                                Title
 
-        </form>
+                            </label>
+
+                            <input type="text" name="title" class="form-control"
+                                value="<?= esc($pageHeader['title'] ?? '') ?>" required>
+
+                        </div>
+
+                        <!-- SUBTITLE -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Subtitle
+
+                            </label>
+
+                            <input type="text" name="subtitle" class="form-control"
+                                value="<?= esc($pageHeader['subtitle'] ?? '') ?>">
+
+                        </div>
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label">
+
+                                Description
+
+                            </label>
+
+                            <textarea name="description" rows="5"
+                                class="form-control"><?= esc($pageHeader['description'] ?? '') ?></textarea>
+
+                        </div>
+
+                        <!-- HEADER IMAGE -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Header Image
+
+                            </label>
+
+                            <input type="file" name="image" id="image" class="form-control" accept="image/*">
+
+                            <small class="text-muted">
+
+                                Leave blank to keep the current header image.
+
+                            </small>
+
+                        </div>
+
+                        <!-- CURRENT IMAGE PREVIEW -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Current Header Image
+
+                            </label>
+
+                            <div>
+
+                                <img id="imagePreview" src="<?= !empty($pageHeader['image'])
+                                                                ? base_url($pageHeader['image'])
+                                                                : base_url('assets/admin/images/no-image.png') ?>"
+                                    class="img-thumbnail" style="
+                                        width: 320px;
+                                        height: 180px;
+                                        object-fit: cover;
+                                    " alt="Team Page Header Image">
+
+                            </div>
+
+                        </div>
+
+                        <!-- STATUS -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Status
+
+                            </label>
+
+                            <select name="status" class="form-select">
+
+                                <option value="1" <?= ($pageHeader['status'] ?? 1) == 1 ? 'selected' : '' ?>>
+
+                                    Active
+
+                                </option>
+
+                                <option value="0" <?= ($pageHeader['status'] ?? 1) == 0 ? 'selected' : '' ?>>
+
+                                    Inactive
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex gap-2">
+
+                        <button type="submit" class="btn btn-primary">
+
+                            <i class="feather-save me-2"></i>
+
+                            Save Page Header
+
+                        </button>
+
+                        <a href="<?= base_url('admin/teampage') ?>" class="btn btn-light">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -179,29 +260,26 @@
 <?= $this->section('scripts') ?>
 
 <script>
-    document
-        .getElementById('image')
-        ?.addEventListener(
-            'change',
-            function(e) {
-                const file = e.target.files[0];
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('imagePreview');
 
-                if (!file) {
-                    return;
-                }
+    if (imageInput && imagePreview) {
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
 
-                const reader = new FileReader();
-
-                reader.onload = function(event) {
-                    document
-                        .getElementById('imagePreview')
-                        .src =
-                        event.target.result;
-                };
-
-                reader.readAsDataURL(file);
+            if (!file) {
+                return;
             }
-        );
+
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                imagePreview.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
 </script>
 
 <?= $this->endSection() ?>

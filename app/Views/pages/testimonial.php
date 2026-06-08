@@ -14,6 +14,7 @@
             <ol class="breadcrumb justify-content-center mb-0">
 
                 <?php if (!empty($page_header['extra_data']['breadcrumbs'])): ?>
+
                     <?php foreach ($page_header['extra_data']['breadcrumbs'] as $breadcrumb): ?>
 
                         <?php if (!empty($breadcrumb['url'])): ?>
@@ -29,6 +30,19 @@
                         <?php endif; ?>
 
                     <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <li class="breadcrumb-item">
+                        <a class="text-white" href="<?= base_url() ?>">
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item text-white active" aria-current="page">
+                        Testimonials
+                    </li>
+
                 <?php endif; ?>
 
             </ol>
@@ -47,11 +61,11 @@
             <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
 
                 <h6 class="text-primary">
-                    <?= esc($testimonial_header['subtitle'] ?? '') ?>
+                    <?= esc($testimonial_header['subtitle'] ?? 'Testimonial') ?>
                 </h6>
 
                 <h1 class="mb-4">
-                    <?= esc($testimonial_header['title'] ?? '') ?>
+                    <?= esc($testimonial_header['title'] ?? 'What Our Clients Say!') ?>
                 </h1>
 
             </div>
@@ -66,7 +80,11 @@
                         <div class="testimonial-img position-relative">
 
                             <?php if (!empty($testimonial['image'])): ?>
-                                <img class="img-fluid rounded-circle mx-auto mb-5" src="<?= base_url(esc($testimonial['image'])) ?>"
+                                <img class="img-fluid rounded-circle mx-auto mb-5" src="<?= base_url($testimonial['image']) ?>"
+                                    alt="<?= esc($testimonial['title'] ?? '') ?>">
+                            <?php else: ?>
+                                <img class="img-fluid rounded-circle mx-auto mb-5"
+                                    src="<?= base_url('public/assets/img/testimonial-1.jpg') ?>"
                                     alt="<?= esc($testimonial['title'] ?? '') ?>">
                             <?php endif; ?>
 

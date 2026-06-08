@@ -256,10 +256,8 @@
 
                 </button>
 
-                <a href="<?= base_url('admin/testimonialpage/testimonial') ?>" class="btn btn-light">
-
+                <a href="<?= base_url('admin/testimonialpage/testimonials') ?>" class="btn btn-light">
                     Cancel
-
                 </a>
 
             </div>
@@ -275,40 +273,40 @@
 <?= $this->section('scripts') ?>
 
 <script>
-$('#icon').on(
-    'keyup',
-    function() {
-        $('#iconPreview')
-            .attr(
-                'class',
-                $(this).val()
-            );
-    }
-);
-
-document
-    .getElementById('image')
-    .addEventListener(
-        'change',
-        function(e) {
-            const file = e.target.files[0];
-
-            if (!file) {
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function(event) {
-                document
-                    .getElementById('imagePreview')
-                    .src =
-                    event.target.result;
-            };
-
-            reader.readAsDataURL(file);
+    $('#icon').on(
+        'keyup',
+        function() {
+            $('#iconPreview')
+                .attr(
+                    'class',
+                    $(this).val()
+                );
         }
     );
+
+    document
+        .getElementById('image')
+        .addEventListener(
+            'change',
+            function(e) {
+                const file = e.target.files[0];
+
+                if (!file) {
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    document
+                        .getElementById('imagePreview')
+                        .src =
+                        event.target.result;
+                };
+
+                reader.readAsDataURL(file);
+            }
+        );
 </script>
 
 <?= $this->endSection() ?>
