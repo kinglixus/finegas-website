@@ -18,11 +18,13 @@ class Contact extends BaseController
 
     public function index()
     {
+        $contactData = $this->contactModel->getContactPageData();
+
         $data = [
-            'title' => 'Contact Us - Fine Gas',
+            'title' => ($contactData['page_header']['title'] ?? 'Contact Us') . ' - Fine Gas',
         ];
 
-        $data = array_merge($data, $this->contactModel->getContactPageData());
+        $data = array_merge($data, $contactData);
 
         return view('pages/contact', $data);
     }

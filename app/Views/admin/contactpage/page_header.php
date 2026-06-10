@@ -50,6 +50,26 @@
 
 </div>
 
+<?php if (session()->getFlashdata('success')): ?>
+
+    <div class="alert alert-success">
+
+        <?= esc(session()->getFlashdata('success')) ?>
+
+    </div>
+
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+
+    <div class="alert alert-danger">
+
+        <?= esc(session()->getFlashdata('error')) ?>
+
+    </div>
+
+<?php endif; ?>
+
 <div class="card">
 
     <div class="card-header">
@@ -64,7 +84,8 @@
 
     <div class="card-body">
 
-        <form action="<?= base_url('admin/contactpage/page-header-update') ?>" method="post">
+        <form action="<?= base_url('admin/contactpage/page-header-update') ?>" method="post"
+            enctype="multipart/form-data">
 
             <?= csrf_field() ?>
 
@@ -109,6 +130,43 @@
 
                 </div>
 
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Current Header Image
+
+                    </label>
+
+                    <div>
+
+                        <img id="imagePreview" src="<?= !empty($pageHeader['image'])
+                                                        ? base_url($pageHeader['image'])
+                                                        : base_url('assets/img/carousel-1.jpg') ?>" class="img-thumbnail"
+                            style="width:320px;height:180px;object-fit:cover;" alt="Contact Page Header">
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Change Header Image
+
+                    </label>
+
+                    <input type="file" name="image" id="image" class="form-control" accept="image/*">
+
+                    <small class="text-muted">
+
+                        Recommended size: 1920 x 1080
+
+                    </small>
+
+                </div>
+
             </div>
 
             <button type="submit" class="btn btn-primary">
@@ -124,5 +182,27 @@
     </div>
 
 </div>
+
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+
+<script>
+    document.getElementById('image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            document.getElementById('imagePreview').src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+</script>
 
 <?= $this->endSection() ?>

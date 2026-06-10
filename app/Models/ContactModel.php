@@ -6,10 +6,10 @@ use CodeIgniter\Model;
 
 class ContactModel extends Model
 {
-    protected $table            = 'contact_pages';
-    protected $primaryKey       = 'id';
-    protected $returnType       = 'array';
-    protected $useTimestamps    = true;
+    protected $table         = 'contact_pages';
+    protected $primaryKey    = 'id';
+    protected $returnType    = 'array';
+    protected $useTimestamps = true;
 
     protected $allowedFields = [
         'section_name',
@@ -26,10 +26,15 @@ class ContactModel extends Model
         'status',
     ];
 
-    private function decodeExtraData(array $row): array
+    private function decodeExtraData(?array $row): ?array
     {
+        if (empty($row)) {
+            return null;
+        }
+
         if (!empty($row['extra_data'])) {
             $decoded = json_decode($row['extra_data'], true);
+
             $row['extra_data'] = is_array($decoded) ? $decoded : [];
         } else {
             $row['extra_data'] = [];
@@ -46,7 +51,7 @@ class ContactModel extends Model
             ->orderBy('sort_order', 'ASC')
             ->first();
 
-        return $section ? $this->decodeExtraData($section) : null;
+        return $this->decodeExtraData($section);
     }
 
     public function getSectionItems(string $sectionName): array
@@ -57,15 +62,19 @@ class ContactModel extends Model
             ->orderBy('sort_order', 'ASC')
             ->findAll();
 
-        return array_map([$this, 'decodeExtraData'], $items);
+        foreach ($items as $key => $item) {
+            $items[$key] = $this->decodeExtraData($item);
+        }
+
+        return $items;
     }
 
     public function getContactPageData(): array
     {
         return [
-            'page_header'  => $this->getSection('page_header'),
+            'page_header'   => $this->getSection('page_header'),
             'contact_intro' => $this->getSection('contact_intro'),
-            'contact_info' => $this->getSectionItems('contact_info'),
+            'contact_info'  => $this->getSectionItems('contact_info'),
         ];
     }
 }

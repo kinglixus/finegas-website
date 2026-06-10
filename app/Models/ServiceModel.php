@@ -6,10 +6,10 @@ use CodeIgniter\Model;
 
 class ServiceModel extends Model
 {
-    protected $table            = 'service_pages';
-    protected $primaryKey       = 'id';
-    protected $returnType       = 'array';
-    protected $useTimestamps    = true;
+    protected $table         = 'service_pages';
+    protected $primaryKey    = 'id';
+    protected $returnType    = 'array';
+    protected $useTimestamps = true;
 
     protected $allowedFields = [
         'section_name',
@@ -26,10 +26,15 @@ class ServiceModel extends Model
         'status',
     ];
 
-    private function decodeExtraData(array $row): array
+    private function decodeExtraData(?array $row): ?array
     {
+        if (empty($row)) {
+            return null;
+        }
+
         if (!empty($row['extra_data'])) {
             $decoded = json_decode($row['extra_data'], true);
+
             $row['extra_data'] = is_array($decoded) ? $decoded : [];
         } else {
             $row['extra_data'] = [];
@@ -46,7 +51,7 @@ class ServiceModel extends Model
             ->orderBy('sort_order', 'ASC')
             ->first();
 
-        return $section ? $this->decodeExtraData($section) : null;
+        return $this->decodeExtraData($section);
     }
 
     public function getSectionItems(string $sectionName): array
@@ -57,7 +62,11 @@ class ServiceModel extends Model
             ->orderBy('sort_order', 'ASC')
             ->findAll();
 
-        return array_map([$this, 'decodeExtraData'], $items);
+        foreach ($items as $key => $item) {
+            $items[$key] = $this->decodeExtraData($item);
+        }
+
+        return $items;
     }
 
     public function getServicePageData(): array

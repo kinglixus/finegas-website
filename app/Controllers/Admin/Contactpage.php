@@ -80,27 +80,86 @@ class Contactpage extends BaseController
                 );
         }
 
+        $extraData = [
+            'breadcrumbs' => [
+                [
+                    'label' => 'Home',
+                    'url'   => '/',
+                ],
+                [
+                    'label' => $this->request->getPost('title') ?: 'Contact Us',
+                    'url'   => null,
+                ],
+            ],
+        ];
+
+        $data = [
+
+            'title' =>
+            $this->request
+                ->getPost('title'),
+
+            'subtitle' =>
+            $this->request
+                ->getPost('subtitle'),
+
+            'description' =>
+            $this->request
+                ->getPost('description'),
+
+            'extra_data' =>
+            json_encode($extraData),
+
+            'status' =>
+            $this->request
+                ->getPost('status')
+        ];
+
+        $image =
+            $this->request
+            ->getFile('image');
+
+        if (
+            $image &&
+            $image->isValid() &&
+            !$image->hasMoved()
+        ) {
+            $uploadPath =
+                FCPATH .
+                'uploads/page_headers';
+
+            if (!is_dir($uploadPath)) {
+                mkdir(
+                    $uploadPath,
+                    0777,
+                    true
+                );
+            }
+
+            if (
+                !empty($pageHeader['image']) &&
+                file_exists(FCPATH . $pageHeader['image'])
+            ) {
+                unlink(FCPATH . $pageHeader['image']);
+            }
+
+            $newName =
+                $image->getRandomName();
+
+            $image->move(
+                $uploadPath,
+                $newName
+            );
+
+            $data['image'] =
+                'uploads/page_headers/' .
+                $newName;
+        }
+
         $this->contactModel
             ->update(
                 $pageHeader['id'],
-                [
-
-                    'title' =>
-                    $this->request
-                        ->getPost('title'),
-
-                    'subtitle' =>
-                    $this->request
-                        ->getPost('subtitle'),
-
-                    'description' =>
-                    $this->request
-                        ->getPost('description'),
-
-                    'status' =>
-                    $this->request
-                        ->getPost('status')
-                ]
+                $data
             );
 
         activity_log(
@@ -117,7 +176,6 @@ class Contactpage extends BaseController
                 'Page Header updated successfully.'
             );
     }
-
     public function contactIntro()
     {
         $contactIntro =
