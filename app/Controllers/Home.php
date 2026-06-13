@@ -15,12 +15,8 @@ class Home extends BaseController
 
     public function index()
     {
-        $data = [
-            'title' => 'Fine Gas - Renewable Energy',
-        ];
-        $data = array_merge($data, $this->homeModel->getHomePageData());
+        $data = $this->homeModel->getHomePageData();
 
-        // dd($data);
         return view('pages/home', $data);
     }
 }
