@@ -234,13 +234,11 @@
                      </li>
                      <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/teampage/page-header') ?>">Page
                              Header Section</a></li>
-                     <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/teampage/members') ?>">Team
+                     <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/teampage/team-members') ?>">Team
                              Members Section</a>
                      </li>
                      <li class="nxl-item"><a class="nxl-link" href="<?= base_url('admin/teampage/team-header') ?>">Team
-                             Header
-                             Section</a></li>
-                     <li class="nxl-item"><a class="nxl-link" href="widgets-miscellaneous.html">Miscellaneous</a>
+                             Header Section</a>
                      </li>
                  </ul>
              </li>

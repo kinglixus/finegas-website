@@ -114,7 +114,7 @@
 
                 </p>
 
-                <a href="<?= base_url('admin/teampage/members') ?>" class="btn btn-warning">
+                <a href="<?= base_url('admin/teampage/team-members') ?>" class="btn btn-warning">
 
                     Manage Members
 
@@ -294,7 +294,7 @@
 
                         <td>
 
-                            <a href="<?= base_url('admin/teampage/members') ?>" class="btn btn-sm btn-warning">
+                            <a href="<?= base_url('admin/teampage/team-members') ?>" class="btn btn-sm btn-warning">
 
                                 <i class="feather-settings"></i>
 

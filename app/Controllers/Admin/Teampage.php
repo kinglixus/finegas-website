@@ -149,7 +149,7 @@ class Teampage extends BaseController
 
     public function createTeamMember()
     {
-        return view('admin/teampage/team_member_create', [
+        return view('admin/teampage/create-team-member', [
             'title' => 'Create Team Member',
         ]);
     }

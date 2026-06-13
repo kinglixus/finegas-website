@@ -625,15 +625,15 @@ $routes->group('admin', ['filter' => 'admin_auth'], function ($routes) {
     $routes->get('teampage/team-header', 'Admin\Teampage::teamHeader');
     $routes->post('teampage/team-header-update', 'Admin\Teampage::updateTeamHeader');
 
-    $routes->get('teampage/members', 'Admin\Teampage::members');
+    $routes->get('teampage/team-members', 'Admin\Teampage::teamMembers');
 
-    $routes->get('teampage/create-member', 'Admin\Teampage::createMember');
-    $routes->post('teampage/store-member', 'Admin\Teampage::storeMember');
+    $routes->get('teampage/create-team-member', 'Admin\Teampage::createTeamMember');
+    $routes->post('teampage/store-team-member', 'Admin\Teampage::storeTeamMember');
 
-    $routes->get('teampage/edit-member/(:num)', 'Admin\Teampage::editMember/$1');
-    $routes->post('teampage/update-member/(:num)', 'Admin\Teampage::updateMember/$1');
+    $routes->get('teampage/edit-team-member/(:num)', 'Admin\Teampage::editTeamMember/$1');
+    $routes->post('teampage/update-team-member/(:num)', 'Admin\Teampage::updateTeamMember/$1');
 
-    $routes->post('teampage/delete-member/(:num)', 'Admin\Teampage::deleteMember/$1');
+    $routes->post('teampage/delete-team-member/(:num)', 'Admin\Teampage::deleteTeamMember/$1');
 
     // Product Page Routes
     $routes->get(
